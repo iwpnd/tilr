@@ -46,3 +46,22 @@ func inDeep(x Tile, y []Tile) bool {
 	}
 	return false
 }
+
+func ToFeatureCollection(tiles []Tile) ([]byte, error) {
+	fc := []byte(`{"type":"FeatureCollection","features":[`)
+	for i := range tiles {
+		s, err := tiles[i].MarshallGeoJSON()
+		if err != nil {
+			return nil, err
+		}
+		if i != len(tiles)-1 {
+			s = append(s, []byte(",")...)
+		}
+		fc = append(fc, s...)
+
+	}
+	end := []byte("]}")
+	fc = append(fc, end...)
+
+	return fc, nil
+}
