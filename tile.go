@@ -1,5 +1,7 @@
 package tyler
 
+import geojson "github.com/paulmach/go.geojson"
+
 // Tile ...
 type Tile struct {
 	Z, X, Y int
@@ -13,6 +15,25 @@ func (t Tile) Extent() Extent {
 		MinLat: tileToLat(t.Y+1, t.Z),
 		MaxLng: tileToLng(t.X+1, t.Z),
 	}
+}
+
+func (t Tile) MarshallGeoJSON() ([]byte, error) {
+	extent := t.Extent()
+	sw := []float64{extent.MinLng, extent.MinLat}
+	se := []float64{extent.MaxLng, extent.MinLat}
+	ne := []float64{extent.MaxLng, extent.MaxLat}
+	nw := []float64{extent.MinLng, extent.MaxLat}
+	f := geojson.NewPolygonFeature([][][]float64{{sw, se, ne, nw, sw}})
+	f.SetProperty("Z", t.Z)
+	f.SetProperty("X", t.X)
+	f.SetProperty("Y", t.Y)
+
+	rawJSON, err := f.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	return rawJSON, nil
 }
 
 // Contains valides whether a given Point is within a given Tile
@@ -36,12 +57,12 @@ func (t Tile) Center() Point {
 }
 
 // Children returns the four children tiles of the input tile
-func (t Tile) Children() [4]Tile {
+func (t Tile) Children() []Tile {
 	x := t.X
 	y := t.Y
 	z := t.Z
 
-	return [4]Tile{
+	return []Tile{
 		{X: x * 2, Y: y * 2, Z: z + 1},
 		{X: x*2 + 1, Y: y * 2, Z: z + 1},
 		{X: x * 2, Y: y*2 + 1, Z: z + 1},

@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	geojson "github.com/paulmach/go.geojson"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -224,4 +225,19 @@ func TestTileCenter(t *testing.T) {
 		assert.Equal(t, test.ExpectedCenter.Lat, p.Lat)
 		assert.Equal(t, test.ExpectedCenter.Lng, p.Lng)
 	}
+}
+
+func TestTileMarshallGeoJSON(t *testing.T) {
+	tile := Tile{Z: 1, X: 1, Y: 1}
+
+	rawJSON, err := tile.MarshallGeoJSON()
+	assert.ErrorIs(t, err, nil)
+
+	f, err := geojson.UnmarshalFeature(rawJSON)
+	assert.ErrorIs(t, err, nil)
+
+	assert.Equal(t, f.Geometry.Type, geojson.GeometryPolygon)
+	assert.Equal(t, f.PropertyMustInt("Z"), 1)
+	assert.Equal(t, f.PropertyMustInt("X"), 1)
+	assert.Equal(t, f.PropertyMustInt("Y"), 1)
 }
