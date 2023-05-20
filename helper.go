@@ -1,6 +1,9 @@
 package tyler
 
-import "math"
+import (
+	"math"
+	"reflect"
+)
 
 func radToDegree(rad float64) float64 {
 	return rad * 180 / math.Pi
@@ -33,4 +36,13 @@ func max(x, y float64) float64 {
 	}
 
 	return y
+}
+
+func inDeep(x Tile, y []Tile) bool {
+	for i := range y {
+		if reflect.DeepEqual(x, y[i]) {
+			return true
+		}
+	}
+	return false
 }
