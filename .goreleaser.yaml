@@ -1,8 +1,8 @@
-project_name: tyler
+project_name: tilr
 builds:
   - env:
       - CGO_ENABLED=0
-    main: ./cmd/tyler
+    main: ./cmd/tilr
     binary: tyler
     goos:
       - linux
