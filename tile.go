@@ -1,4 +1,4 @@
-package tyler
+package tilr
 
 import geojson "github.com/paulmach/go.geojson"
 

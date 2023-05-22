@@ -1,4 +1,4 @@
-module github.com/iwpnd/tyler
+module github.com/iwpnd/tilr
 
 go 1.19
 

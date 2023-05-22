@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/iwpnd/tyler"
+	"github.com/iwpnd/tilr"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,13 +21,13 @@ func tilesFromExtent(ctx *cli.Context) error {
 		return fmt.Errorf("zoom must be between 0 - 20, got: %d", z)
 	}
 
-	b := tyler.Extent{MinLng: e[0], MinLat: e[1], MaxLng: e[2], MaxLat: e[3]}
+	b := tilr.Extent{MinLng: e[0], MinLat: e[1], MaxLng: e[2], MaxLat: e[3]}
 	tiles, err := b.ToTiles(z)
 	if err != nil {
 		return err
 	}
 
-	fc, err := tyler.ToFeatureCollection(tiles)
+	fc, err := tilr.ToFeatureCollection(tiles)
 	if err != nil {
 		return err
 	}
@@ -64,8 +64,8 @@ func init() {
 
 func main() {
 	app := &cli.App{
-		Name:  "tyler",
-		Usage: "tyler",
+		Name:  "tilr",
+		Usage: "tilr",
 		Commands: []*cli.Command{
 			&fromExtentCommand,
 		},

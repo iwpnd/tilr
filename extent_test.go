@@ -1,4 +1,4 @@
-package tyler
+package tilr
 
 import (
 	"testing"
